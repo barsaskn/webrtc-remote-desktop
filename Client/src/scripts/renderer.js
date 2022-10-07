@@ -2,7 +2,7 @@ const electron = require("electron");
 const { ipcRenderer } = electron;
 const firebase = require("firebase/app")
 const { getFirestore, collection, getDocs } = require('firebase/firestore');
-
+console.log("connected")
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -15,7 +15,7 @@ const firebaseConfig = {
     measurementId: "G-7LBKY1R73D"
   };
 
-const videoElement = document.querySelector("video");
+const videoElement = document.getElementById("video");
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 
