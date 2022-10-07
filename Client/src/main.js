@@ -13,7 +13,6 @@ const createWindow = () =>{
     });
     desktopCapturer.getSources({ types: ['screen'] }).then(async sources => {
         for (const source of sources) {
-            console.log(source);
             mainWindow.webContents.send('SET_SOURCE', source.id)
         }
       })
