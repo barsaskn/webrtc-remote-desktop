@@ -1,7 +1,7 @@
 const electron = require("electron");
 const { ipcRenderer } = electron;
-const firebase = require("firebase/app")
-const { getFirestore, collection, getDocs } = require('firebase/firestore');
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 console.log("connected")
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -40,11 +40,8 @@ async function startStream(){
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     videoElement.srcObject = stream;
     videoElement.play();
-    let firebaseApp;
-    if(!firebase.getApps.length){
-        firebaseApp = firebase.initializeApp(firebaseConfig);
-    }
-    const firestore = getFirestore(firebaseApp);
+    initializeApp(firebaseConfig);
+    const firestore = getFirestore();
     
     const servers = {
         iceServers: [
@@ -52,7 +49,7 @@ async function startStream(){
             urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'],
           },
         ],
-        iceCandidatePoolSize: 10,
+        iceCandidatePoolSize: 1,
     };
     
     let pc = new RTCPeerConnection(servers);
@@ -62,10 +59,11 @@ async function startStream(){
     localstream.getTracks().forEach((track) => {
         pc.addTrack(track, localstream);
     })
-    //const callDoc = firestore.collection("calls").doc().then( e =>{console.log(callDoc.id);})
-    // const offerCandidates = callDoc.collection("offerCandidates");
-    // const answerCandidates = callDoc.collection("answerCandidates");
-    // console.log(callDoc.id);
+
+    const callDoc = firestore.collection("calls").doc()
+    const offerCandidates = callDoc.collection("offerCandidates");
+    const answerCandidates = callDoc.collection("answerCandidates");
+    console.log(callDoc.id);
 
 
     // pc.onicecandidate = event =>{
