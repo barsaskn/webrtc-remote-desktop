@@ -31,11 +31,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remote Desktop</title>
     <script defer src="./scripts/renderer.js"></script>
+    <script defer type="module" src="./scripts/connection.js"></script>
 </head>
 <body>
     <video id="video" height="300" width="600"></video>
     <div class="controller">
         <button id="startBtn">Start</button>
+        <button id="shareBtn">Share</button>
         <button id="stopBtn">Stop</button>
     </div>
 </body>
