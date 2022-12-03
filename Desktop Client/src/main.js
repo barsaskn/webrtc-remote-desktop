@@ -1,5 +1,7 @@
-const { app, BrowserWindow, desktopCapturer, ipcMain } = require("electron");
+const { app, BrowserWindow, desktopCapturer, ipcMain, screen } = require("electron");
 const path = require("path");
+const robot = require("@jitsi/robotjs")
+
 
 const createWindow = () =>{
     const mainWindow = new BrowserWindow({
@@ -24,5 +26,13 @@ const createWindow = () =>{
 
 app.on("ready", createWindow);
 ipcMain.on("mousePosition", (event,data) => {
-    console.log(data);
+    const pcHeight = screen.getPrimaryDisplay().size.height;
+    const pcWidth = screen.getPrimaryDisplay().size.width;
+    data = JSON.parse(data)
+    const xVar = (pcWidth/Math.trunc(data.sizeWidth))*Math.trunc(data.positionX);
+    const yVar = (pcHeight/Math.trunc(data.sizeHeight))*Math.trunc(data.positionY);
+    robot.moveMouse(Math.trunc(xVar),Math.trunc(yVar));
+
+    console.log("x="+Math.trunc(xVar) + "y="+Math.trunc(yVar));
+
 });
