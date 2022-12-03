@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+
 const remoteVideo = document.getElementById('remoteVideo');
 const connectBtn = document.getElementById('connectBtn');
 const callKey = document.getElementById("callKey");
@@ -33,6 +34,8 @@ const servers = {
 // Global State
 const pc = new RTCPeerConnection(servers);
 
+
+
 let remoteStream = new MediaStream();
 
 
@@ -40,9 +43,12 @@ pc.ontrack = (event) => {
     event.streams[0].getTracks().forEach((track) => {
       remoteStream.addTrack(track);
     });
-  };
-  remoteVideo.srcObject = remoteStream;
-
+};
+remoteVideo.srcObject = remoteStream;
+remoteVideo.onmousemove = function(e) {
+    var rect = e.target.getBoundingClientRect();
+    let data = {x: parseInt(e.clientX-rect.left), y: parseInt(e.clientY-rect.top)}
+}
 async function startStream(){
     const callId = callKey.value;
     const callDoc = firestore.collection('calls').doc(callId);
@@ -75,5 +81,35 @@ async function startStream(){
             pc.addIceCandidate(new RTCIceCandidate(data));
           }
         });
-      });
+    });
+    let dataChannel = pc.createDataChannel("dataChannel");
+    dataChannel.onerror = (error) => {
+        console.log("Data Channel Error:", error);
+    };
+  
+    dataChannel.onmessage = (event) => {
+        console.log("Got Data Channel Message:", event.data);
+    };
+  
+    dataChannel.onopen = () => {
+        console.log("DATA CHANNEL ARRIVED")
+    };
+  
+    dataChannel.onclose = () => {
+        console.log("The Data Channel is Closed");
+    };
+    remoteVideo.onmousemove = function(e){
+            var rect = e.target.getBoundingClientRect();
+            var x = e.clientX - rect.left; //x position within the element. yatay
+            var y = e.clientY - rect.top;  //y position within the element. dikey
+            let data = {
+                positionX:x,
+                positionY:y,
+                sizeHeight: rect.height,
+                sizeWidth: rect.width
+            }
+            dataChannel.send(JSON.stringify(data), "dataChannel");
+            console.log(data); //datayı yollaa
+    }
 }
+

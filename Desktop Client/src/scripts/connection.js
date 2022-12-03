@@ -29,6 +29,38 @@ const servers = {
   
   // Global State
 const pc = new RTCPeerConnection(servers);
+let receiveChannel = pc.createDataChannel("dataChannel");
+/*
+let dataChannel = pc.createDataChannel("dataChannel");
+
+dataChannel.addEventListener('message', event => {
+    const message = event;
+    console.log(message)
+});
+dataChannel.onerror = (error) => {
+    console.log("Data Channel Error:", error);
+};
+dataChannel.onmessage = (event) => {
+    console.log("Got Data Channel Message:", event);
+};
+dataChannel.onopen = () => {
+    console.log("Data channel opened")
+};
+
+dataChannel.onclose = () => {
+    console.log("The Data Channel is Closed");
+};
+*/
+pc.ondatachannel = receiveChannelCallback;
+function receiveChannelCallback(event) {
+    console.log('Receive Channel Callback');
+    receiveChannel = event.channel;
+    receiveChannel.onmessage = onReceiveMessageCallback;
+
+  }
+  function onReceiveMessageCallback(event) {
+    console.log(event.data);
+  }
 
 
 const shareBtn = document.getElementById("shareBtn");
@@ -74,5 +106,6 @@ async function shareConnectionStream(){
           }
         });
     });
+
     
 }
