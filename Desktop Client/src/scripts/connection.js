@@ -1,5 +1,7 @@
 const firebase = require("firebase/app");
 const firestore = require("firebase/firestore")
+const electron = require("electron");
+const { ipcRenderer } = electron;
 console.log("Connection Started.")
 
 const videoStreamElement = document.getElementById("video");
@@ -60,6 +62,7 @@ function receiveChannelCallback(event) {
   }
   function onReceiveMessageCallback(event) {
     console.log(event.data);
+    ipcRenderer.send("mousePosition", event.data);
   }
 
 

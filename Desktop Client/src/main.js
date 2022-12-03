@@ -1,4 +1,4 @@
-const { app, BrowserWindow, desktopCapturer } = require("electron");
+const { app, BrowserWindow, desktopCapturer, ipcMain } = require("electron");
 const path = require("path");
 
 const createWindow = () =>{
@@ -23,3 +23,6 @@ const createWindow = () =>{
 
 
 app.on("ready", createWindow);
+ipcMain.on("mousePosition", (event,data) => {
+    console.log(data);
+});
