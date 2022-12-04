@@ -103,6 +103,7 @@ async function startStream(){
             var x = e.clientX - rect.left; //x position within the element. yatay
             var y = e.clientY - rect.top;  //y position within the element. dikey
             let data = {
+                clicked:false,
                 positionX:x,
                 positionY:y,
                 sizeHeight: rect.height,
@@ -111,5 +112,20 @@ async function startStream(){
             dataChannel.send(JSON.stringify(data), "dataChannel");
             console.log(data); //datayı yollaa
     }
+    remoteVideo.onclick = function(e){
+            console.log("Click")
+            var rect = e.target.getBoundingClientRect();
+            var x = e.clientX - rect.left; //x position within the element. yatay
+            var y = e.clientY - rect.top;  //y position within the element. dikey
+            let data = {
+                clicked:true,
+                positionX:x,
+                positionY:y,
+                sizeHeight: rect.height,
+                sizeWidth: rect.width
+            }
+            dataChannel.send(JSON.stringify(data), "dataChannel");
+    };
+
 }
 

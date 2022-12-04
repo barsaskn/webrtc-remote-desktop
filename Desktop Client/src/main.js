@@ -32,6 +32,9 @@ ipcMain.on("mousePosition", (event,data) => {
     const xVar = (pcWidth/Math.trunc(data.sizeWidth))*Math.trunc(data.positionX);
     const yVar = (pcHeight/Math.trunc(data.sizeHeight))*Math.trunc(data.positionY);
     robot.moveMouse(Math.trunc(xVar),Math.trunc(yVar));
+    if(data.clicked){
+        robot.mouseClick()
+    }
 
     console.log("x="+Math.trunc(xVar) + "y="+Math.trunc(yVar));
 
