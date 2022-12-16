@@ -107,7 +107,8 @@ async function startStream(){
                 positionX:x,
                 positionY:y,
                 sizeHeight: rect.height,
-                sizeWidth: rect.width
+                sizeWidth: rect.width,
+                time: new Date().getTime()
             }
             dataChannel.send(JSON.stringify(data), "dataChannel");
             console.log(data); //datayı yollaa
@@ -122,7 +123,8 @@ async function startStream(){
                 positionX:x,
                 positionY:y,
                 sizeHeight: rect.height,
-                sizeWidth: rect.width
+                sizeWidth: rect.width,
+                time: new Date().getTime()
             }
             dataChannel.send(JSON.stringify(data), "dataChannel");
     };

@@ -62,6 +62,9 @@ function receiveChannelCallback(event) {
   }
   function onReceiveMessageCallback(event) {
     console.log(event.data);
+    var dataJson = JSON.parse(event.data);
+    console.log("Delay: "+(Number.parseInt((new Date().getTime()))-Number.parseInt(dataJson.time))+"" )
+    
     ipcRenderer.send("mousePosition", event.data);
   }
 
